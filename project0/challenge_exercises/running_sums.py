@@ -17,7 +17,7 @@ def running_sums(nums):
 	for i in range(len(nums)):
 		total += nums[i]
 		out.append(total)
-	return(out)
+	return out
 
 print(running_sums(numbers))
 	
