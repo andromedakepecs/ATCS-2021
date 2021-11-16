@@ -1,9 +1,10 @@
 # Given an integer numRows, return the first numRows of Pascal's triangle.
 # Return list of lists
-def generate(n):
-	if n == 1:
+def generate(num_rows, n1, n2):
+	if num_rows == 1:
 		return [1]
 	else:
+		return generate(num_rows)
 		
 
 
