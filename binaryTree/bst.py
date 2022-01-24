@@ -1,12 +1,11 @@
 """
-Ms. Namasivayam
+Andromeda Kepecs
 ATCS 2021-2022
 Binary Tree
 
 Python program to for binary tree insertion and traversals
 """
 from bst_node import Node
-
 
 '''
 A function that returns a string of the inorder 
@@ -15,8 +14,9 @@ Each node on the tree should be followed by a '-'.
 Ex. "1-2-3-4-5-"
 '''
 def getInorder(root):
+    if root:
+        return getInorder(root.left) + str(root.val) + '-' + getInorder(root.right)
     return ''
-
 
 '''
 A function that returns a string of the postorder 
@@ -26,6 +26,8 @@ Ex. "1-2-3-4-5-"
 '''
 # A function to do postorder tree traversal
 def getPostorder(root):
+    if root:
+        return getPostorder(root.left) + getPostorder(root.right) + str(root.val) + '-'
     return ''
 
 
@@ -36,6 +38,8 @@ Each node on the tree should be followed by a '-'.
 Ex. "1-2-3-4-5-"
 '''
 def getPreorder(root):
+    if root:
+        return str(root.val) + '-' + getPreorder(root.left) + getPreorder(root.right)
     return ''
 
 
@@ -57,8 +61,8 @@ is a valid binary search tree
 def isBST(root):
     return False
 
-
-if __name__ == '__main__':
+# Test code
+def main():
     # Tree to help you test your code
     root = Node(10)
     root.left = Node(5)
@@ -75,6 +79,10 @@ if __name__ == '__main__':
     print("\nPostorder traversal of binary tree is")
     print(getPostorder(root))
 
-    root = insert(root, 8)
-    print("\nInorder traversal of binary tree with 8 inserted is")
-    print(getInorder(root))
+    # root = insert(root, 8)
+    # print("\nInorder traversal of binary tree with 8 inserted is")
+    # print(getInorder(root))
+
+
+if __name__ == '__main__':
+    main()
