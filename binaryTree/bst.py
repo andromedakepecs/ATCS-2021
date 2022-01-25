@@ -51,6 +51,15 @@ original root with no change if the key already
 exists in the tree.
 '''
 def insert(root, key):
+    if root is None:
+        return Node(key)
+    else:
+        if root.val == key:
+            return root
+        elif root.val < key:
+            root.right = insert(root.right, key)
+        else:
+            root.left = insert(root.left, key)
     return root
 
 
@@ -79,9 +88,9 @@ def main():
     print("\nPostorder traversal of binary tree is")
     print(getPostorder(root))
 
-    # root = insert(root, 8)
-    # print("\nInorder traversal of binary tree with 8 inserted is")
-    # print(getInorder(root))
+    root = insert(root, 8)
+    print("\nInorder traversal of binary tree with 8 inserted is")
+    print(getInorder(root))
 
 
 if __name__ == '__main__':
