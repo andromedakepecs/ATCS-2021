@@ -68,7 +68,17 @@ Challenge: A function determines if a binary tree
 is a valid binary search tree
 '''
 def isBST(root):
-    return False
+    if root == None:
+        return True
+    if root.left != None and root.left.val > root.val:
+        return False
+    if root.right != None and root.right.val < root.val:
+        return False
+    if not isBST(root.left) or not isBST(root.right):
+        return False
+
+    return True
+
 
 # Test code
 def main():
@@ -79,19 +89,32 @@ def main():
     root.left.left = Node(3)
     root.left.right = Node(9)
 
+    # Preorder test
     print("Preorder traversal of binary tree is")
     print(getPreorder(root))
 
+    # Inorder test
     print("\nInorder traversal of binary tree is")
     print(getInorder(root))
 
+    # Postorder test
     print("\nPostorder traversal of binary tree is")
     print(getPostorder(root))
 
+    # Insertion test
     root = insert(root, 8)
     print("\nInorder traversal of binary tree with 8 inserted is")
     print(getInorder(root))
 
+    # Is BST tree test True
+    print(isBST(root))
+
+    bad_tree = Node(10)
+    bad_tree.left = Node(15)
+    bad_tree.right = Node(16)
+    root.left.left = Node(3)
+    root.left.right = Node(9)
+    print(isBST(bad_tree))
 
 if __name__ == '__main__':
     main()
