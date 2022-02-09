@@ -7,16 +7,13 @@ TODO add exceptions for non-number inputs
 '''
 
 ROWS, COLS = (3, 3)
+PLAYER1 = 'X'
+PLAYER2 = 'O'
 
 class TicTacToe:
     def __init__(self):
         """ Defines board using '-' """
-        # self.board = [['-'] * COLS] * ROWS
-        for i in range(0, ROWS):
-            for j in range(0, COLS):
-                self.board[ROWS, COLS]
-
-        self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+        self.board = [['-' for i in range(ROWS)] for j in range(COLS)]
 
     def print_instructions(self):
         """ Prints game instructions """
@@ -47,7 +44,8 @@ class TicTacToe:
         """
         if row < len(self.board) and row >= 0:
             if col < len(self.board) and col >= 0:
-                return True
+                if self.board[row][col] == '-': # Check if other player has made move
+                    return True
         return False
 
     def place_player(self, player, row, col):
@@ -76,25 +74,83 @@ class TicTacToe:
         self.place_player(player, placement[0], placement[1])
 
     def check_col_win(self, player):
-        # TODO: Check col win
+        """ Dumb column check for a 3x3 Tic Tac Toe """
+        if self.board[0][0] == player and self.board[1][0] == player and self.board[2][0] == player:
+            return True
+        elif self.board[0][1] == player and self.board[1][1] == player and self.board[2][1] == player:
+            return True
+        elif self.board[0][2] == player and self.board[1][2] == player and self.board[2][2] == player:
+            return True
         return False
 
     def check_row_win(self, player):
-        # TODO: Check row win
+        """ Dumb row check for a 3x3 Tic Tac Toe """
+        if self.board[0][0] == player and self.board[0][1] == player and self.board[0][2] == player:
+            return True
+        elif self.board[1][0] == player and self.board[1][1] == player and self.board[1][2] == player:
+            return True
+        elif self.board[2][0] == player and self.board[2][1] == player and self.board[2][2] == player:
+            return True
         return False
+        
 
     def check_diag_win(self, player):
-        # TODO: Check diagonal win
+        """ Dumb diagnoal check for a 3x3 Tic Tac Toe """
+        if self.board[0][0] == player and self.board[1][1] == player and self.board[2][2] == player:
+            return True
+        elif self.board[0][2] == player and self.board[1][1] == player and self.board[2][0] == player:
+            return True
         return False
 
     def check_win(self, player):
-        # TODO: Check win
+        if self.check_col_win(player) or self.check_row_win(player) or self.check_diag_win(player):
+            return True
         return False
 
     def check_tie(self):
-        # TODO: Check tie
-        return False
+        """ Dumb method to check if each board space is filled """
+        for i in range(ROWS):
+            for j in range(COLS):
+                if self.board[i][j] == '-':
+                    return False
+        return True
 
     def play_game(self):
-        # TODO: Play game
-        return
+        """ Runs Tic Tac Toe """
+        self.print_instructions()
+        self.print_board()
+
+        win = False
+        tie = False
+        while not win and not tie:
+            # Player 1 turn and check win, tie
+            self.take_turn(PLAYER1)
+            self.print_board()
+
+            win = self.check_win(PLAYER1)
+            if win:
+                print(PLAYER1 + ' wins!')
+                break
+
+            # Check for tie after checking for wins 
+            # because method only tells if board is filled
+            tie = self.check_tie()
+            if tie:
+                print('Tie')
+                break
+
+            # Player 2 turn
+            self.take_turn(PLAYER2)
+            self.print_board()
+
+            win = self.check_win(PLAYER2)
+            if win:
+                print(PLAYER2 + ' wins!')
+                break
+
+            tie = self.check_tie()
+            if tie:
+                print('Tie')
+                break
+
+
