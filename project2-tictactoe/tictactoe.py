@@ -2,8 +2,8 @@ import random
 
 '''
 Tic-Tac-Toe
+A game of 3x3 Tic Tac Toe
 @author Andromeda Kepecs
-TODO add exceptions for non-number inputs
 '''
 
 ROWS, COLS = (3, 3)
@@ -68,9 +68,27 @@ class TicTacToe:
 
         return [row, col]
 
+    def take_random_turn(self, player):
+        """
+        Takes a random turn
+        Returns a 1D list containing row and column
+        """
+        print(player + '\'s Turn')
+        valid = self.is_valid_move(ROWS + 1, COLS + 1)
+        while not valid:
+            row = random.randint(0, ROWS)
+            col = random.randint(0, COLS)
+            valid = self.is_valid_move(row, col)
+            if valid:
+                break
+        return [row, col]
+
     def take_turn(self, player):
         """ Takes turn """
-        placement = self.take_manual_turn(player) # Method returns list of row and column
+        if player == PLAYER1:
+            placement = self.take_manual_turn(player) # Method returns list of row and column
+        else:
+            placement = self.take_random_turn(player)
         self.place_player(player, placement[0], placement[1])
 
     def check_col_win(self, player):
