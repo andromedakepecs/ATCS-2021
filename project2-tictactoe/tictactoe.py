@@ -7,8 +7,9 @@ A game of 3x3 Tic Tac Toe
 '''
 
 ROWS, COLS = (3, 3)
-PLAYER1 = 'X'
-PLAYER2 = 'O'
+USER = 'X'
+COMPUTER = 'O'
+DEPTH = 2
 
 class TicTacToe:
     def __init__(self):
@@ -54,7 +55,7 @@ class TicTacToe:
 
     def take_manual_turn(self, player):
         """
-        Takes manual turn using user input
+        Takes manual turn using user input, checking if valid
         Returns a 1D list containing player's row and column placement
         """
         print(player + '\'s Turn')
@@ -70,7 +71,7 @@ class TicTacToe:
 
     def take_random_turn(self, player):
         """
-        Takes a random turn
+        Takes a random turn, checking if valid
         Returns a 1D list containing row and column
         """
         print(player + '\'s Turn')
@@ -83,12 +84,67 @@ class TicTacToe:
                 break
         return [row, col]
 
+    def take_minimax_turn(self, player, depth, alpha = (-100, ), beta = (100, )):
+        """ Take optimal turn using minimax algorithm with set depth and alpha-sbeta pruning"""
+        # Base case
+        win = self.check_win(player)
+        if win:
+            if player == COMPUTER:
+                return (1, )
+            elif player == USER:
+                return (-1, )
+        tie = self.check_tie(player)
+        if tie:
+            return (0, )
+        elif depth <= 0:
+            return (0, )
+
+        # Computer turn
+        if player == COMPUTER:
+            best = -10000
+            best_move = (-1, -1)
+            for row in ROWS:
+                for col in COLS:
+                    if self.is_valid_move(row, col):
+                        self.place_player(COMPUTER, row, col)
+                        move = self.take_minimax_turn(USER, depth - 1, alpha, beta)
+                        if best < move[0]:
+                            best = move[0]
+                            best_move = (row, col)
+                        if best < alpha:
+                            alpha = best
+                        if alpha >= beta:
+                            break
+                        self.board[row][col] = '-' # Reset board
+            return best, best_move
+
+        # User turn
+        elif player == USER:
+            worst = 10000
+            worst_move = (-1, -1)
+            for row in ROWS:
+                for col in COLS:
+                    if self.is_valid_move(row, col):
+                        self.place_player(USER, row, col)
+                        move = self.take_minimax_turn(COMPUTER, depth - 1, alpha, beta)
+                        if worst > move[0]:
+                            worst = move[0]
+                            worst_move = (row, col)
+                        if worst > beta:
+                            beta = worst
+                        if alpha >= beta:
+                            break
+                        self.board[row][col] = '-'
+            return worst, worstmove
+
+        return (0, )
+
     def take_turn(self, player):
         """ Takes turn """
-        if player == PLAYER1:
+        if player == USER:
             placement = self.take_manual_turn(player) # Method returns list of row and column
         else:
-            placement = self.take_random_turn(player)
+            placement = self.take_minimax_turn(player, DEPTH)
         self.place_player(player, placement[0], placement[1])
 
     def check_col_win(self, player):
@@ -121,6 +177,7 @@ class TicTacToe:
         return False
 
     def check_win(self, player):
+        """ Check if player has won game """
         if self.check_col_win(player) or self.check_row_win(player) or self.check_diag_win(player):
             return True
         return False
@@ -142,12 +199,12 @@ class TicTacToe:
         tie = False
         while not win and not tie:
             # Player 1 turn and check win, tie
-            self.take_turn(PLAYER1)
+            self.take_turn(USER)
             self.print_board()
 
-            win = self.check_win(PLAYER1)
+            win = self.check_win(USER)
             if win:
-                print(PLAYER1 + ' wins!')
+                print(USER + ' wins!')
                 break
 
             # Check for tie after checking for wins 
@@ -158,12 +215,12 @@ class TicTacToe:
                 break
 
             # Player 2 turn
-            self.take_turn(PLAYER2)
+            self.take_turn(COMPUTER)
             self.print_board()
 
-            win = self.check_win(PLAYER2)
+            win = self.check_win(COMPUTER)
             if win:
-                print(PLAYER2 + ' wins!')
+                print(COMPUTER + ' wins!')
                 break
 
             tie = self.check_tie()
