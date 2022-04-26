@@ -93,7 +93,7 @@ class TicTacToe:
                 return (1, )
             elif player == USER:
                 return (-1, )
-        tie = self.check_tie(player)
+        tie = self.check_tie()
         if tie:
             return (0, )
         elif depth <= 0:
@@ -103,8 +103,8 @@ class TicTacToe:
         if player == COMPUTER:
             best = -10000
             best_move = (-1, -1)
-            for row in ROWS:
-                for col in COLS:
+            for row in range(ROWS):
+                for col in range(COLS):
                     if self.is_valid_move(row, col):
                         self.place_player(COMPUTER, row, col)
                         move = self.take_minimax_turn(USER, depth - 1, alpha, beta)
@@ -122,8 +122,8 @@ class TicTacToe:
         elif player == USER:
             worst = 10000
             worst_move = (-1, -1)
-            for row in ROWS:
-                for col in COLS:
+            for row in range(ROWS):
+                for col in range(COLS):
                     if self.is_valid_move(row, col):
                         self.place_player(USER, row, col)
                         move = self.take_minimax_turn(COMPUTER, depth - 1, alpha, beta)
