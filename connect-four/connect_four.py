@@ -27,9 +27,27 @@ class Game():
 				print(SPACING.join(str(self.board[col][row])), end = ' ')
 			print()
 
+	def place_player(self, player, row, column):
+		pass
+
+	def is_valid_move(self, row, column):
+		pass
+
+	def player_turn(self, player):
+		pass
+
+	def ai_turn(self, player):
+		pass
+
+	def check_win(self, player):
+		pass
+
+	def play_game(self):
+		pass
+
 def main():
-	g = Game()
-	g.print_board()
+	game = Game()
+	game.play_game()
 
 if __name__ == '__main__':
 	main()
