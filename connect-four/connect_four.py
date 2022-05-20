@@ -1,10 +1,10 @@
-# Connect Four with Monte Carlo Tree Search 
+# Connect Four with Negamax with alpha-beta pruning
 # @author Andromeda Kepecs
 
 # Console visualizations
 EMPTY = '.'
 SPACING = ' '
-RED = 'R'
+RED = 'R' # TODO RED_NAME VS RED_NUMBER (player turn order)
 YELLOW = 'Y'
 
 # Game definitions
@@ -61,8 +61,35 @@ class Game():
 				print('Please enter a valid move.')
 		return column
 
-	def ai_turn(self, player):
-		pass
+	def negamax(self, depth = 0, alpha = -1000, beta = 1000, player):
+		""" Negamax search with alpha-beta pruning """
+		if self.check_tie():
+			return 0
+		elif self.check_win(player) or depth == 0:
+			return 0
+		
+		if (beta > max_score):
+			beta = max_score
+			if (alpha >= beta):
+				return beta
+		for i in range(ROWS):
+			place_player()
+			score = -negamax(-beta, -alpha);
+		if score >= beta:
+			return score
+		if score > alpha:
+			alpha = score
+		return alpha
+
+	# def score(self, depth, player):
+	# 	""" Score various game scenarios """
+	# 	if self.check_tie():
+	# 		return 0
+	# 	elif self.check_win(player):
+	# 		return 1000 / depth
+	# 	else:
+	# 		return -1000 / depth
+
 
 	def check_win(self, player):
 		""" Check if four of the same color are in a row """
@@ -106,10 +133,17 @@ class Game():
 		turn = RED
 		while not game_over:
 			self.print_board()
-			self.place_player(turn, self.player_turn(turn))
+			if turn == RED:
+				self.place_player(turn, self.player_turn(turn))
+			else:
+				self.place_player(turn, self.negamax(turn))
+
 			if self.check_win(turn):
 				self.print_board()
-				print('Red wins')
+				if turn == RED:
+					print('Red wins')
+				else:
+					print('Yellow wins')
 				game_over = True
 			if self.check_tie():
 				self.print_board()
